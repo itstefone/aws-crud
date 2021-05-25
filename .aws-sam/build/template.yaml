@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: product-CRUD
+Transform:
+- AWS::Serverless-2016-10-31
+Resources:
+  createProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/createProduct.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Create product endpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /products
+            Method: POST
+      CodeUri: createProductFunction
+  getProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/getProducts.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Create product endpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /products
+            Method: GET
+      CodeUri: getProductsFunction
+  getProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/getProductById.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Create product endpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /products/{product}
+            Method: GET
+      CodeUri: getProductFunction
+Outputs:
+  WebEndpoint:
+    Description: API Gateway endpoint URL for Prod stage
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
