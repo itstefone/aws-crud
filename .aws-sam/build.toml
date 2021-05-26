@@ -6,6 +6,6 @@ codeuri = "/home/stefone/Desktop/product-CRUD"
 runtime = "nodejs14.x"
 source_md5 = ""
 packagetype = "Zip"
-functions = ["createProductFunction", "getProductsFunction", "getProductFunction"]
+functions = ["createProductFunction", "getProductsFunction", "getProductFunction", "deleteProductFunction", "updateProductFunction"]
 
 [layer_build_definitions]

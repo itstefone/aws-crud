@@ -48,6 +48,36 @@ Resources:
             Path: /products/{product}
             Method: GET
       CodeUri: getProductFunction
+  deleteProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/deleteProduct.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Create product endpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /products/{product}
+            Method: DELETE
+      CodeUri: deleteProductFunction
+  updateProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/updateProduct.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Update product endpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /products/{product}
+            Method: PUT
+      CodeUri: updateProductFunction
 Outputs:
   WebEndpoint:
     Description: API Gateway endpoint URL for Prod stage

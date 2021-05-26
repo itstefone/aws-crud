@@ -1,4 +1,4 @@
-const { getProductById } = require("../../utils/product");
+const { getProductById, deleteProduct } = require("../../utils/product");
 
 exports.handler = async (event, context, callback) => {
   let response;
@@ -11,7 +11,7 @@ exports.handler = async (event, context, callback) => {
   } catch (e) {
     response = {
       statusCode: 400,
-      body: JSON.stringify(e),
+      body: JSON.stringify(e.message),
     };
     return response;
   }

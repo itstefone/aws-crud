@@ -17,6 +17,24 @@ exports.getProductById = async (productId) => {
 
 
     throw new Error("Product wasn't found!");
-    
+}
+
+
+
+exports.deleteProduct = async (product) => {
+    const {id, image} = product;
+
+    console.log(image);
+
+    let query = `DELETE FROM ${env.tables.products} WHERE id = ?`;
+    let result;
+    try {
+       result =  await runQuery(query, id);
+       console.log(result);
+    } catch(e) {
+        throw new Error('Unsuccessfully delete product');
+    }
+
+    return result;
 
 }
