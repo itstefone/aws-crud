@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "product-crud-app"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-tzzpbg24y1x1"
+s3_prefix = "product-crud-app"
+region = "eu-central-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

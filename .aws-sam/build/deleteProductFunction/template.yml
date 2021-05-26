@@ -11,7 +11,6 @@ Description: >-
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
 Transform:
   - AWS::Serverless-2016-10-31
-
 # Resources declares the AWS resources that you want to include in the stack
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
 Resources:
@@ -93,6 +92,59 @@ Resources:
           Properties:
             Path: /products/{product}
             Method: PUT
+
+  triggeredTopicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/lambdaTriggered.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Update product endpoint
+
+  myTestTopicTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: test-topic
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !GetAtt triggeredTopicFunction.Arn
+
+  myTestTopicTopicInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt triggeredTopicFunction.Arn
+      Principal: sns.amazonaws.com
+
+  publicsherTopicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/publisherTopic.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Update product endpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /sns-publisher
+            Method: GET
+
+  ExampleTopicPolicy:
+    Type: "AWS::SNS::TopicPolicy"
+    Properties:
+      Topics:
+        - !Ref myTestTopicTopic
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "sns:Publish"
+            Resource: !Ref myTestTopicTopic
+            Principal:
+              AWS: "*"
 
 Outputs:
   WebEndpoint:

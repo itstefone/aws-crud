@@ -78,6 +78,63 @@ Resources:
             Path: /products/{product}
             Method: PUT
       CodeUri: updateProductFunction
+  triggeredTopicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/lambdaTriggered.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Update product endpoint
+      CodeUri: triggeredTopicFunction
+  myTestTopicTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: test-topic
+      Subscription:
+      - Protocol: lambda
+        Endpoint:
+          Fn::GetAtt:
+          - triggeredTopicFunction
+          - Arn
+  myTestTopicTopicInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - triggeredTopicFunction
+        - Arn
+      Principal: sns.amazonaws.com
+  publicsherTopicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/publisherTopic.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: Update product endpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /sns-publisher
+            Method: GET
+      CodeUri: publicsherTopicFunction
+  ExampleTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+      - Ref: myTestTopicTopic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action: sns:Publish
+          Resource:
+            Ref: myTestTopicTopic
+          Principal:
+            AWS: '*'
 Outputs:
   WebEndpoint:
     Description: API Gateway endpoint URL for Prod stage
