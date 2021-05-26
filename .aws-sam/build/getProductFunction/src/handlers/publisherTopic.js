@@ -12,9 +12,10 @@ exports.handler = async (event, context, callback) => {
     let response;
 
 
-   await  SNS.publish({
-        Message: 'Just a test',
-        TopicArn: 'arn:aws:sns:eu-central-1:641874005858:test-topic'
+     SNS.publish({
+        
+        Message: JSON.stringify({default: 'dasdasdas', asdsadsa:"Dsadsad"}),
+        TopicArn: 'arn:aws:sns:eu-central-1:641874005858:test-topic',
     }, (err, data) => {
         if(err) {
             console.log(err.stack);
