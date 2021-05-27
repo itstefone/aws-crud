@@ -11,7 +11,7 @@ const S3 = new AWS.S3({
 });
 
 
-exports.storageToS3 = async (file) => {
+exports.storageToS3 =   async (file) => {
 
 
     const ext = file.filename.split('.')[1];
@@ -31,6 +31,7 @@ exports.storageToS3 = async (file) => {
         ACL: "public-read",
         ContentType: file.contentType
     }).promise().catch(err => {
+        console.log(err)
         throw new err;
     });
     

@@ -3,6 +3,7 @@ const multipart = require('lambda-multipart-parser');
 const {storageToS3} = require('../../utils/storage');
 const {env} = require('../../utils/env');
 const {runQuery} = require('../../utils/connection');
+const { validateCreateBodyProduct } = require('../../utils/validator');
 
 
 exports.handler = async (event, context, callback) => {
@@ -12,14 +13,24 @@ exports.handler = async (event, context, callback) => {
     const file = body.files[0];
 
     try {
+ 
     let url = await storageToS3(file);
-
     let product = {
         name: body.name,
         price: body.price,
         description: body.description,
         image: url
     };
+
+
+    await validateCreateBodyProduct(product, {
+        name: ['validateString'],
+        price: ['validateNumber'],
+        description: ['validateString']
+    });
+
+
+
     const names = Object.keys(product);
     const values = Object.values(product);
     
